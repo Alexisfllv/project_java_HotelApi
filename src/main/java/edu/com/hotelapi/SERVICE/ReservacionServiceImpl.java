@@ -1,0 +1,91 @@
+package edu.com.hotelapi.SERVICE;
+
+import edu.com.hotelapi.DTO.ReservationRequestDTO;
+import edu.com.hotelapi.DTO.ReservationResponseDTO;
+import edu.com.hotelapi.ENTITY.*;
+import edu.com.hotelapi.MAPPER.IReservationMapper;
+import edu.com.hotelapi.REPOSITORY.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+@Service
+@RequiredArgsConstructor
+public class ReservacionServiceImpl implements IReservationService {
+
+    private final IUserRepo userRepo;
+    private final IHistoryRepo historyRepo;
+    private final ITotalRepo totalRepo;
+    private final IReservationRepo reservationRepo;
+    private final IRoomRepo roomRepo;
+
+    private final IReservationMapper reservationMapper;
+
+    @Override
+    public Reservation registrar(ReservationRequestDTO reservationRequestDTO) {
+
+        //mappear el dto a modelo
+        Reservation reservation = reservationMapper.toReservation(reservationRequestDTO);
+
+        reservation.setResv_start(reservationRequestDTO.getResv_start());
+        reservation.setResv_end(reservationRequestDTO.getResv_end());
+        reservation.setResv_status(reservationRequestDTO.getResv_status());
+        reservation.setUser_name(reservationRequestDTO.getUser_name());
+        reservation.setUser_email(reservationRequestDTO.getUser_email());
+        reservation.setUser_telephone(reservationRequestDTO.getUser_telephone());
+        reservation.setBill_name(reservationRequestDTO.getBill_name());
+        reservation.setBill_email(reservationRequestDTO.getBill_email());
+        reservation.setBill_telephone(reservationRequestDTO.getBill_telephone());
+
+        // validacion de user_id
+        User user = userRepo.findById(reservationRequestDTO.getUser_id())
+                .orElseThrow(() -> new RuntimeException("No se encontro el usuario id: "+reservationRequestDTO.getUser_id()));
+        reservation.setUser(user);
+
+        // validacion de room_id
+        Room room = roomRepo.findById(reservationRequestDTO.getRoom_id())
+                .orElseThrow(()-> new RuntimeException("No se encontro el room id: "+reservationRequestDTO.getRoom_id()));
+        reservation.setRoom(room);
+
+        reservation  = reservationRepo.save(reservation);
+
+        // llenar campos de Reservacion Historia
+        ReservationHistory reservationHistory = new ReservationHistory();
+        reservationHistory.setHistory_date(LocalDateTime.now());
+        reservationHistory.setHistory_status(reservationRequestDTO.getResv_status());
+        reservationHistory.setHistory_notes("Creacion de reservacion: "+reservationRequestDTO.getResv_start() + " hasta :" + reservationRequestDTO.getResv_end());
+        reservationHistory.setReservation(reservation);
+
+        // llenar campos de Reservacion Total
+        ReservationTotal reservationTotal = new ReservationTotal();
+        reservationTotal.setTotal_title("--- Total ---");
+
+        // proceso para hallar el costo
+        Long userId =  reservation.getUser().getId();
+        BigDecimal totalAmount = switch (userId.intValue()){
+            case 1 -> BigDecimal.valueOf(100);
+            case 2 -> BigDecimal.valueOf(200);
+            case 3 -> BigDecimal.valueOf(300);
+            default -> BigDecimal.ZERO;
+        };
+
+        // proceso de diferencia de dias
+        long daysBetween = ChronoUnit.DAYS.between(
+                reservationRequestDTO.getResv_start().toLocalDate(),
+                reservationRequestDTO.getResv_end().toLocalDate()
+        );
+        int durationInDays = (int) daysBetween;
+        // multiplicacion :
+        BigDecimal total = totalAmount.multiply(BigDecimal.valueOf(durationInDays));
+
+        reservationTotal.setTotal_amount(total);
+        //
+        reservationTotal.setReservation(reservation);
+
+        return reservation;
+
+    }
+}

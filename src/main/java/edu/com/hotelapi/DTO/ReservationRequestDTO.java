@@ -16,13 +16,13 @@ public class ReservationRequestDTO {
     private String resv_status;
     private String user_name;
     private String user_email;
-    private String user_phone;
+    private String user_telephone;
 
     private String bill_name;
     private String bill_email;
     private String bill_telephone;
 
     // fks
-    private Integer user_id;
-    private Integer room_id;
+    private Long user_id;
+    private Long room_id;
 }
