@@ -6,7 +6,9 @@ import edu.com.hotelapi.ENTITY.*;
 import edu.com.hotelapi.MAPPER.IReservationMapper;
 import edu.com.hotelapi.REPOSITORY.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReservacionServiceImpl implements IReservationService {
 
     private final IUserRepo userRepo;
@@ -24,6 +27,7 @@ public class ReservacionServiceImpl implements IReservationService {
 
     private final IReservationMapper reservationMapper;
 
+    @Transactional
     @Override
     public Reservation registrar(ReservationRequestDTO reservationRequestDTO) {
 
@@ -58,19 +62,22 @@ public class ReservacionServiceImpl implements IReservationService {
         reservationHistory.setHistory_status(reservationRequestDTO.getResv_status());
         reservationHistory.setHistory_notes("Creacion de reservacion: "+reservationRequestDTO.getResv_start() + " hasta :" + reservationRequestDTO.getResv_end());
         reservationHistory.setReservation(reservation);
+        historyRepo.save(reservationHistory);
 
         // llenar campos de Reservacion Total
         ReservationTotal reservationTotal = new ReservationTotal();
         reservationTotal.setTotal_title("--- Total ---");
 
         // proceso para hallar el costo
-        Long userId =  reservation.getUser().getId();
+        Long userId =  reservation.getRoom().getId();
         BigDecimal totalAmount = switch (userId.intValue()){
             case 1 -> BigDecimal.valueOf(100);
             case 2 -> BigDecimal.valueOf(200);
             case 3 -> BigDecimal.valueOf(300);
             default -> BigDecimal.ZERO;
         };
+
+        log.warn("RESERVATION/ROOM/ID = {}", reservation.getRoom().getId());
 
         // proceso de diferencia de dias
         long daysBetween = ChronoUnit.DAYS.between(
@@ -84,6 +91,7 @@ public class ReservacionServiceImpl implements IReservationService {
         reservationTotal.setTotal_amount(total);
         //
         reservationTotal.setReservation(reservation);
+        totalRepo.save(reservationTotal);
 
         return reservation;
 
