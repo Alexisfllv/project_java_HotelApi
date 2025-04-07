@@ -2,6 +2,7 @@ package edu.com.hotelapi.CONTROLLER;
 
 
 import edu.com.hotelapi.DTO.ReservationRequestDTO;
+import edu.com.hotelapi.DTO.ReservationResponseDTO;
 import edu.com.hotelapi.ENTITY.Reservation;
 import edu.com.hotelapi.SERVICE.IReservationService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class ReservationController {
     private final IReservationService reservationService;
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody ReservationRequestDTO reservationRequestDTO) {
+    public ResponseEntity<ReservationResponseDTO> createReservation(@RequestBody ReservationRequestDTO reservationRequestDTO) {
         return ResponseEntity.ok(reservationService.registrar(reservationRequestDTO));
     }
 

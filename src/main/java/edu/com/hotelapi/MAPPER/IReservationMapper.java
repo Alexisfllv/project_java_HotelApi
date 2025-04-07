@@ -15,8 +15,9 @@ public interface IReservationMapper {
     @Mapping(target = "room.id" , source = "room_id")
     Reservation toReservation(ReservationRequestDTO reservationRequestDTO);
 
-    @Mapping(target = "userResponseDTO", source = "user")
-    @Mapping(target = "romResponseDTO", source = "room")
+    @Mapping(target = "user", source = "user")
+    @Mapping(target = "room", source = "room")
+    @Mapping(target = "room.precio_dto", source = "room.price")
     ReservationResponseDTO toReservationResponseDTO(Reservation reservation);
     Reservation toReservation(ReservationResponseDTO reservationResponseDTO);
 }

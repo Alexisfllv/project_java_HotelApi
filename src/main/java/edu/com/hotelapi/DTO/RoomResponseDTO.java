@@ -10,6 +10,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomResponseDTO {
-    private Integer room_type;
-    private BigDecimal room_price;
+    private Long id;
+    private BigDecimal precio_dto;
 }

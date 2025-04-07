@@ -7,7 +7,7 @@ import edu.com.hotelapi.ENTITY.Reservation;
 public interface IReservationService {
 
     // registro de la Reservacion
-    Reservation registrar(ReservationRequestDTO reservationRequestDTO);
+    ReservationResponseDTO registrar(ReservationRequestDTO reservationRequestDTO);
 
 
 }

@@ -2,8 +2,12 @@ package edu.com.hotelapi.SERVICE;
 
 import edu.com.hotelapi.DTO.ReservationRequestDTO;
 import edu.com.hotelapi.DTO.ReservationResponseDTO;
+import edu.com.hotelapi.DTO.RoomResponseDTO;
+import edu.com.hotelapi.DTO.UserResponseDTO;
 import edu.com.hotelapi.ENTITY.*;
 import edu.com.hotelapi.MAPPER.IReservationMapper;
+import edu.com.hotelapi.MAPPER.IRoomMapper;
+import edu.com.hotelapi.MAPPER.IUserMapper;
 import edu.com.hotelapi.REPOSITORY.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +30,12 @@ public class ReservacionServiceImpl implements IReservationService {
     private final IRoomRepo roomRepo;
 
     private final IReservationMapper reservationMapper;
+    private final IRoomMapper roomMapper;
+    private final IUserMapper userMapper;
 
     @Transactional
     @Override
-    public Reservation registrar(ReservationRequestDTO reservationRequestDTO) {
+    public ReservationResponseDTO registrar(ReservationRequestDTO reservationRequestDTO) {
 
         //mappear el dto a modelo
         Reservation reservation = reservationMapper.toReservation(reservationRequestDTO);
@@ -54,7 +60,11 @@ public class ReservacionServiceImpl implements IReservationService {
                 .orElseThrow(()-> new RuntimeException("No se encontro el room id: "+reservationRequestDTO.getRoom_id()));
         reservation.setRoom(room);
 
-        reservation  = reservationRepo.save(reservation);
+        reservation = reservationRepo.save(reservation);
+
+        ReservationResponseDTO respuesta = reservationMapper.toReservationResponseDTO(reservation);
+        UserResponseDTO respuestaUsuario = userMapper.toUserResponseDTO(user);
+
 
         // llenar campos de Reservacion Historia
         ReservationHistory reservationHistory = new ReservationHistory();
@@ -93,7 +103,19 @@ public class ReservacionServiceImpl implements IReservationService {
         reservationTotal.setReservation(reservation);
         totalRepo.save(reservationTotal);
 
-        return reservation;
+        // finish
+
+        // formar respuesta =
+        respuesta.setTotal_days("Días de estancia: " + durationInDays);
+        respuesta.setTotal_price("Total a pagar : " + total);
+
+        // sobre escritura campo user
+        respuestaUsuario.setEmailEmpresa("empresa@gmail.com");
+        respuestaUsuario.setPhoneEmpresa("empresaphone@gmail.com");
+
+        respuesta.setUser(respuestaUsuario);
+
+        return respuesta;
 
     }
 }
