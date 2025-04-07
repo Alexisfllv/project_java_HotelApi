@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RomRequestDTO {
+public class RoomRequestDTO {
     private Integer room_type;
     private BigDecimal room_price;
 }
