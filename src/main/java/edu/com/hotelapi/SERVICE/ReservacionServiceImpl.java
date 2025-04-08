@@ -47,13 +47,13 @@ public class ReservacionServiceImpl implements IReservationService {
          return reservations.stream()
                 .map(reservation -> {
                     ReservationResponseDTO dto = reservationMapper.toReservationResponseDTO(reservation);
-
-                    dto.setTotal_days("Días de estancia: " + calculationService.calcularDias(dto.getResv_start(), dto.getResv_end()));
+                    Integer dias = calculationService.calcularDias(dto.getResv_start(), dto.getResv_end());
+                    dto.setTotal_days("Días de estancia: " +dias );
                     
                     // calcular total
                     BigDecimal precio = calculationService.calcularPrecio(dto.getRoom().getId());
 
-                    BigDecimal total = precio.multiply(BigDecimal.valueOf(calcularDias(dto.getResv_start(), dto.getResv_end())));
+                    BigDecimal total = precio.multiply(new BigDecimal(dias));
 
                     dto.setTotal_price("Valor total: " + total);
 
@@ -113,22 +113,13 @@ public class ReservacionServiceImpl implements IReservationService {
         reservationTotal.setTotal_title("--- Total ---");
 
         // proceso para hallar el costo
-        Long userId =  reservation.getRoom().getId();
-        BigDecimal totalAmount = switch (userId.intValue()){
-            case 1 -> BigDecimal.valueOf(100);
-            case 2 -> BigDecimal.valueOf(200);
-            case 3 -> BigDecimal.valueOf(300);
-            default -> BigDecimal.ZERO;
-        };
+        BigDecimal totalAmount = calculationService.calcularPrecio(reservation.getRoom().getId());
 
         log.warn("RESERVATION/ROOM/ID = {}", reservation.getRoom().getId());
 
-        // proceso de diferencia de dias
-        long daysBetween = ChronoUnit.DAYS.between(
-                reservationRequestDTO.getResv_start().toLocalDate(),
-                reservationRequestDTO.getResv_end().toLocalDate()
-        );
-        int durationInDays = (int) daysBetween;
+
+        Integer durationInDays = calculationService.calcularDias(reservation.getResv_start(), reservation.getResv_end());
+
         // multiplicacion :
         BigDecimal total = totalAmount.multiply(BigDecimal.valueOf(durationInDays));
 
@@ -153,27 +144,4 @@ public class ReservacionServiceImpl implements IReservationService {
 
     }
 
-    // metodo
-
-
-
-    private int calcularDias(LocalDateTime startDate, LocalDateTime endDate) {
-        // proceso de diferencia de dias
-        long daysBetween = ChronoUnit.DAYS.between(
-                startDate.toLocalDate(), endDate.toLocalDate()
-        );
-        return (int) daysBetween;
-    }
-
-    private BigDecimal calcularPrecio(Long id){
-
-        BigDecimal totalAmount = switch (id.intValue()){
-            case 1 -> BigDecimal.valueOf(100);
-            case 2 -> BigDecimal.valueOf(200);
-            case 3 -> BigDecimal.valueOf(300);
-            default -> BigDecimal.ZERO;
-
-        };
-        return totalAmount;
-    }
 }
