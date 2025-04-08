@@ -9,14 +9,18 @@ import edu.com.hotelapi.MAPPER.IReservationMapper;
 import edu.com.hotelapi.MAPPER.IRoomMapper;
 import edu.com.hotelapi.MAPPER.IUserMapper;
 import edu.com.hotelapi.REPOSITORY.*;
+import edu.com.hotelapi.UTILL.UtillReservationServiceImpl.ReservationCalculationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +36,36 @@ public class ReservacionServiceImpl implements IReservationService {
     private final IReservationMapper reservationMapper;
     private final IRoomMapper roomMapper;
     private final IUserMapper userMapper;
+
+    // utill
+    private final ReservationCalculationService calculationService;
+
+    @Override
+    public List<ReservationResponseDTO> listar() {
+        List<Reservation> reservations = reservationRepo.findAll();
+
+         return reservations.stream()
+                .map(reservation -> {
+                    ReservationResponseDTO dto = reservationMapper.toReservationResponseDTO(reservation);
+
+                    dto.setTotal_days("Días de estancia: " + calculationService.calcularDias(dto.getResv_start(), dto.getResv_end()));
+                    
+                    // calcular total
+                    BigDecimal precio = calculationService.calcularPrecio(dto.getRoom().getId());
+
+                    BigDecimal total = precio.multiply(BigDecimal.valueOf(calcularDias(dto.getResv_start(), dto.getResv_end())));
+
+                    dto.setTotal_price("Valor total: " + total);
+
+                    UserResponseDTO userDto = userMapper.toUserResponseDTO(reservation.getUser());
+                    userDto.setEmailEmpresa("ListadoEmailEmpresa@Gmail.com");
+                    userDto.setPhoneEmpresa("111111");
+                    dto.setUser(userDto);
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     @Override
@@ -117,5 +151,29 @@ public class ReservacionServiceImpl implements IReservationService {
 
         return respuesta;
 
+    }
+
+    // metodo
+
+
+
+    private int calcularDias(LocalDateTime startDate, LocalDateTime endDate) {
+        // proceso de diferencia de dias
+        long daysBetween = ChronoUnit.DAYS.between(
+                startDate.toLocalDate(), endDate.toLocalDate()
+        );
+        return (int) daysBetween;
+    }
+
+    private BigDecimal calcularPrecio(Long id){
+
+        BigDecimal totalAmount = switch (id.intValue()){
+            case 1 -> BigDecimal.valueOf(100);
+            case 2 -> BigDecimal.valueOf(200);
+            case 3 -> BigDecimal.valueOf(300);
+            default -> BigDecimal.ZERO;
+
+        };
+        return totalAmount;
     }
 }

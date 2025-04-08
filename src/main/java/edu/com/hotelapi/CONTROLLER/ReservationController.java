@@ -7,10 +7,9 @@ import edu.com.hotelapi.ENTITY.Reservation;
 import edu.com.hotelapi.SERVICE.IReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservaciones")
@@ -19,6 +18,11 @@ public class ReservationController {
 
     // ioc
     private final IReservationService reservationService;
+
+    @GetMapping
+    public ResponseEntity<List<ReservationResponseDTO>> getAllReservations() {
+        return ResponseEntity.ok(reservationService.listar());
+    }
 
     @PostMapping
     public ResponseEntity<ReservationResponseDTO> createReservation(@RequestBody ReservationRequestDTO reservationRequestDTO) {
