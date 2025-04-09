@@ -19,11 +19,11 @@ public interface IRoomMapper {
     // Req
 
     RoomeRequestDTO toRoomeRequestDTO(Room room);
-    Room  toRoom( RoomeRequestDTO roomRequestDTO);
+    Room  toRoome( RoomeRequestDTO roomRequestDTO);
 
     //Res
     RoomeResponseDTO toRoomeResponseDTO(Room room);
-    Room toRoom(RoomeResponseDTO roomResponseDTO);
+    Room toRoome(RoomeResponseDTO roomResponseDTO);
 
 
 }

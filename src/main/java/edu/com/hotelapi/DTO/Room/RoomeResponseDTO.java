@@ -6,7 +6,7 @@ public record RoomeResponseDTO(
 
         Long id,
         String type,
-        BigDecimal precio
+        BigDecimal price
 
 ) {
 }

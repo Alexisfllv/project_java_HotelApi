@@ -6,6 +6,7 @@ import edu.com.hotelapi.DTO.UserResponseDTO;
 import edu.com.hotelapi.DTO.Usuario.UsuarioRequestDTO;
 import edu.com.hotelapi.DTO.Usuario.UsuarioResponseDTO;
 import edu.com.hotelapi.ENTITY.User;
+import edu.com.hotelapi.Exception.Errors.ExDataNotFoundException;
 import edu.com.hotelapi.MAPPER.IUserMapper;
 import edu.com.hotelapi.Page.PageResponseDTO;
 import edu.com.hotelapi.REPOSITORY.IUserRepo;
@@ -45,7 +46,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UsuarioResponseDTO getUser(Long id) {
         User user = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("NOT FOUND ID : "+id));
+                .orElseThrow(() -> new ExDataNotFoundException("NOT FOUND ID : "+id));
 
         return iUserMapper.toUsuarioResponseDTO(user);
     }
@@ -68,7 +69,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ResponseDTO updateUser(Long id, UsuarioRequestDTO usuarioRequestDTO) {
         User userexiste =  userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("NOT FOUND ID : "+id));
+                .orElseThrow(() -> new ExDataNotFoundException("NOT FOUND ID : "+id));
 
         userexiste.setName(usuarioRequestDTO.name());
         userexiste.setEmail(usuarioRequestDTO.email());
@@ -86,7 +87,7 @@ public class UserServiceImpl implements IUserService {
     public ResponseDTO deleteUser(Long id) {
 
         User userexiste =  userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("NOT FOUND ID : "+id));
+                .orElseThrow(() -> new ExDataNotFoundException("NOT FOUND ID : "+id));
 
         userRepo.delete(userexiste);
 

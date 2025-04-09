@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public record RoomeRequestDTO(
 
         String type,
-        BigDecimal precio
+        BigDecimal price
 
 ) {
 }
