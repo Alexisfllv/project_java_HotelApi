@@ -1,14 +1,14 @@
-package edu.com.hotelapi.SERVICE;
+package edu.com.hotelapi.SERVICE.Impl;
 
 import edu.com.hotelapi.DTO.ReservationRequestDTO;
 import edu.com.hotelapi.DTO.ReservationResponseDTO;
-import edu.com.hotelapi.DTO.RoomResponseDTO;
 import edu.com.hotelapi.DTO.UserResponseDTO;
 import edu.com.hotelapi.ENTITY.*;
 import edu.com.hotelapi.MAPPER.IReservationMapper;
 import edu.com.hotelapi.MAPPER.IRoomMapper;
 import edu.com.hotelapi.MAPPER.IUserMapper;
 import edu.com.hotelapi.REPOSITORY.*;
+import edu.com.hotelapi.SERVICE.IReservationService;
 import edu.com.hotelapi.UTILL.UtillReservationServiceImpl.ReservationCalculationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 

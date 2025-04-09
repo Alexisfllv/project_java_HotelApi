@@ -2,9 +2,9 @@ package edu.com.hotelapi.DTO.Room;
 
 import java.math.BigDecimal;
 
-public record RoomeResponseDTO(
+public record RoomeRequestDTO(
 
-        Long id,
+        String type,
         BigDecimal precio
 
 ) {
