@@ -18,7 +18,7 @@ public class ReservationTotal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "total_id")
-    private Long Id;
+    private Long id;
 
     @Column(name = "total_title")
     private String total_title;
@@ -27,7 +27,7 @@ public class ReservationTotal {
     private BigDecimal total_amount;
 
     @ManyToOne
-    @JoinColumn(name = "reservation_id", nullable = false)
+    @JoinColumn(name = "reservation_total_id", nullable = false)
     @JsonIgnore
     private Reservation reservation;
 }

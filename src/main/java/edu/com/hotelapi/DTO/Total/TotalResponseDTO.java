@@ -8,5 +8,5 @@ public record TotalResponseDTO(
         Long id,
         String total_title,
         BigDecimal total_amount,
-        Reservation reservation
+        Long reservation_total_id
 ) {}

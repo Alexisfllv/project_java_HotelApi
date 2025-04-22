@@ -29,9 +29,6 @@ public class Reservation {
     @Column(name = "reservation_status", nullable = false)
     private String resv_status;
 
-    @Column(name = "reservation_user_telephone", nullable = false)
-    private String user_telephone;
-
     @Column(name = "reservation_bill_name", nullable = false)
     private String bill_name;
 
@@ -50,10 +47,12 @@ public class Reservation {
     private Room room;
 
     // Tablas asociadas
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservationHistory> historials;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_history_id")
+    private List<ReservationHistory> historials = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservationTotal> totals ;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_total_id")
+    private List<ReservationTotal> totals = new ArrayList<>();
 }

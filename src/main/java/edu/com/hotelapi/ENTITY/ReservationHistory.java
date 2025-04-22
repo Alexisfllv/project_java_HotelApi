@@ -29,7 +29,7 @@ public class ReservationHistory {
     private String history_notes;
 
     @ManyToOne
-    @JoinColumn(name = "reservation_id", nullable = false)
+    @JoinColumn(name = "reservation_history_id", nullable = false)
     @JsonIgnore
     private Reservation reservation;
 }

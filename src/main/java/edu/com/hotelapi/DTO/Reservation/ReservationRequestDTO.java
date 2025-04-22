@@ -10,7 +10,6 @@ public record ReservationRequestDTO(
         LocalDateTime resv_start,
         LocalDateTime resv_end,
         String resv_status,
-        String user_telephone,
         String bill_name,
         String bill_email,
         String bill_telephone,

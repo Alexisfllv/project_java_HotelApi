@@ -15,13 +15,12 @@ public record ReservationResponseDTO(
         LocalDateTime resv_start,
         LocalDateTime resv_end,
         String resv_status,
-        String user_telephone,
         String bill_name,
         String bill_email,
         String bill_telephone,
         // datos a ingresar
-        UsuarioResponseDTO usuarioResponseDTO,
-        RoomResponseDTO roomResponseDTO,
+        UsuarioResponseDTO user,
+        RoomResponseDTO room,
         List<HistorialResponseDTO> historials,
         List<TotalResponseDTO> totals
 ) {}

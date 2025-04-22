@@ -9,5 +9,5 @@ public record HistorialResponseDTO(
         LocalDateTime history_date,
         String history_status,
         String history_notes,
-        Reservation reservation
+        Long reservation_history_id
 ) {}
