@@ -1,5 +1,6 @@
 package edu.com.hotelapi.ENTITY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +12,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Reservations_historys")
+@Table(name = "Reservations_history")
 public class ReservationHistory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rh_id")
@@ -30,6 +30,6 @@ public class ReservationHistory {
 
     @ManyToOne
     @JoinColumn(name = "reservation_id", nullable = false)
+    @JsonIgnore
     private Reservation reservation;
-
 }

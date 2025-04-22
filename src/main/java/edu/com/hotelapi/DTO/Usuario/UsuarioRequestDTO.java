@@ -6,6 +6,4 @@ public record UsuarioRequestDTO(
         String telephone,
         String password,
         String role
-
-) {
-}
+) {}

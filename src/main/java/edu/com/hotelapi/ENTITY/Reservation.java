@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -13,8 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "Reservations")
 public class Reservation {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
@@ -28,12 +28,6 @@ public class Reservation {
 
     @Column(name = "reservation_status", nullable = false)
     private String resv_status;
-
-    @Column(name = "reservation_user_name", nullable = false)
-    private String user_name;
-
-    @Column(name = "reservation_user_email", nullable = false)
-    private String user_email;
 
     @Column(name = "reservation_user_telephone", nullable = false)
     private String user_telephone;
@@ -55,4 +49,11 @@ public class Reservation {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
+    // Tablas asociadas
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationHistory> historials;
+
+
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservationTotal> totals ;
 }

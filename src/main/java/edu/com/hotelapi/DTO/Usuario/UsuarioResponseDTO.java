@@ -7,5 +7,4 @@ public record UsuarioResponseDTO(
          String telephone,
          String password,
          String role
-) {
-}
+) {}

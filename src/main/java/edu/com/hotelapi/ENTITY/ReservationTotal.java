@@ -1,5 +1,6 @@
 package edu.com.hotelapi.ENTITY;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,6 @@ public class ReservationTotal {
 
     @ManyToOne
     @JoinColumn(name = "reservation_id", nullable = false)
+    @JsonIgnore
     private Reservation reservation;
-
 }
