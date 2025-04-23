@@ -14,10 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HistoriasServiceImpl implements HistoriaService {
 
-
     private final IHistoryRepo historyRepo;
     private final HistorialMapper historialMapper;
-
 
     @Override
     public List<HistorialFullResponseDTO> listarHistorial() {
@@ -25,7 +23,6 @@ public class HistoriasServiceImpl implements HistoriaService {
         return reservationHistories.stream()
                 .map(reservationHistory -> historialMapper.toHistorialFullResponseDto(reservationHistory))
                 .toList();
-
     }
 
     @Override
@@ -34,5 +31,4 @@ public class HistoriasServiceImpl implements HistoriaService {
                 .orElseThrow(()-> new RuntimeException("Historial no encontrado : "+id));
         return historialMapper.toHistorialFullResponseDto(reservationHistory);
     }
-
 }

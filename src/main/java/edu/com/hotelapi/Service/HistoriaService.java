@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface HistoriaService {
     List<HistorialFullResponseDTO> listarHistorial();
-
     HistorialFullResponseDTO buscarHistorial(Long id);
 }

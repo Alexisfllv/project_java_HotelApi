@@ -22,5 +22,4 @@ public interface TotalMapper {
 
     // Modelo full para Total
     TotalFullResponseDTO toTotalFullResponseDTO(ReservationTotal reservationTotal);
-
 }

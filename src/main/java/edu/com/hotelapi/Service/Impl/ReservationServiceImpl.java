@@ -21,28 +21,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
-    //
+    // mapper
     private final ReservationMapper reservationMapper;
-    private final TotalMapper totalMapper;
-    private final HistorialMapper historialMapper;
-    private final RoomMapper roomMapper;
-    private final UsuarioMapper usuarioMapper;
 
     // repos
-
     private final IReservationRepo reservationRepo;
-    private final ITotalRepo totalRepo;
-    private final IHistoryRepo historialRepo;
+
     private final IRoomRepo roomRepo;
     private final IUserRepo userRepo;
 
     // metodos
-
     private final ReservationCalculationService reservationCalculationService;
 
     @Override
     public ReservationPlanoResponseDTO buscar(Long id) {
-        return null;
+        Reservation reservation = reservationRepo.findById(id)
+                .orElseThrow(()-> new RuntimeException("Reservation with id " + id + " not found"));
+        return reservationMapper.toReservationPlanoResponseDto(reservation);
     }
 
     @Override
@@ -109,5 +104,4 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepo.save(reservation);
         return reservationMapper.toReservationResponseDto(reservation);
     }
-
 }

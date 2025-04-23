@@ -23,5 +23,4 @@ public interface ReservationMapper {
     @Mapping(target = "room_type", source = "room.type")
     @Mapping(target = "room_price", source = "room.price")
     ReservationPlanoResponseDTO toReservationPlanoResponseDto(Reservation reservation);
-
 }

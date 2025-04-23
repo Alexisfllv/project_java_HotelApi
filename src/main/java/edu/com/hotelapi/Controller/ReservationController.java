@@ -18,14 +18,19 @@ import java.util.List;
 public class ReservationController {
     private final ReservationService reservationService;
 
-    @PostMapping("/registrar")
-    public ResponseEntity<ReservationResponseDTO> registrar(@RequestBody ReservationRequestDTO reservationRequestDTO) {
-        ReservationResponseDTO res = reservationService.crearReserva(reservationRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(res);
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<ReservationPlanoResponseDTO> buscar(@PathVariable Long id) {
+        return new ResponseEntity<>(reservationService.buscar(id), HttpStatus.OK);
     }
 
     @GetMapping("/listar")
     public ResponseEntity<List<ReservationPlanoResponseDTO>> listar() {
         return ResponseEntity.ok(reservationService.listarReservas());
+    }
+
+    @PostMapping("/registrar")
+    public ResponseEntity<ReservationResponseDTO> registrar(@RequestBody ReservationRequestDTO reservationRequestDTO) {
+        ReservationResponseDTO res = reservationService.crearReserva(reservationRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 }
