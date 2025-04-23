@@ -1,5 +1,6 @@
 package edu.com.hotelapi.Mapper;
 
+import edu.com.hotelapi.DTO.Reservation.TotalPlanoDTO;
 import edu.com.hotelapi.DTO.Total.TotalRequestDTO;
 import edu.com.hotelapi.DTO.Total.TotalResponseDTO;
 import edu.com.hotelapi.ENTITY.ReservationTotal;
@@ -16,4 +17,8 @@ public interface TotalMapper {
 
     @Mapping(target = "reservation_total_id", source = "reservation.id")
     TotalResponseDTO toTotalResponseDTO(ReservationTotal reservationTotal);
+
+    // plano
+    @Mapping(target = "reservation_total_id", source = "reservation.id")
+    TotalPlanoDTO toDto(ReservationTotal total);
 }

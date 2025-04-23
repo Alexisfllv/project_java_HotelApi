@@ -1,6 +1,7 @@
 package edu.com.hotelapi.Service.Impl;
 
 
+import edu.com.hotelapi.DTO.Reservation.ReservationPlanoResponseDTO;
 import edu.com.hotelapi.DTO.Reservation.ReservationRequestDTO;
 import edu.com.hotelapi.DTO.Reservation.ReservationResponseDTO;
 import edu.com.hotelapi.ENTITY.*;
@@ -40,13 +41,16 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationCalculationService reservationCalculationService;
 
     @Override
-    public ReservationResponseDTO buscarReservation(Long id) {
+    public ReservationPlanoResponseDTO buscar(Long id) {
         return null;
     }
 
     @Override
-    public List<ReservationResponseDTO> listarReservas() {
-        return List.of();
+    public List<ReservationPlanoResponseDTO> listarReservas() {
+        List<Reservation> reservations = reservationRepo.findAll();
+        return reservations.stream()
+                .map(reservation -> reservationMapper.toReservationPlanoResponseDto(reservation))
+                .toList();
     }
 
     @Transactional
@@ -88,7 +92,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<ReservationTotal> totals = reservationRequestDTO.totals().stream()
                 .map(dto ->{
                     ReservationTotal t = new ReservationTotal();
-                    t.setTotal_title("Presupuesto");
+                    t.setTotal_title("Costo Total");
 
                     // calcular totalamount
                     BigDecimal precioRoom = roomExiste.getPrice();

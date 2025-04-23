@@ -1,5 +1,6 @@
 package edu.com.hotelapi.Service;
 
+import edu.com.hotelapi.DTO.Reservation.ReservationPlanoResponseDTO;
 import edu.com.hotelapi.DTO.Reservation.ReservationRequestDTO;
 import edu.com.hotelapi.DTO.Reservation.ReservationResponseDTO;
 
@@ -7,10 +8,10 @@ import java.util.List;
 
 public interface ReservationService {
     //
-    ReservationResponseDTO buscarReservation(Long id);
+    ReservationPlanoResponseDTO buscar(Long id);
 
     // listar
-    List<ReservationResponseDTO> listarReservas();
+    List<ReservationPlanoResponseDTO> listarReservas();
 
     // crear
     ReservationResponseDTO crearReserva(ReservationRequestDTO reservationRequestDTO);
