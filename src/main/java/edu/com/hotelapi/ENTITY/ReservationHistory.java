@@ -1,6 +1,7 @@
 package edu.com.hotelapi.ENTITY;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class ReservationHistory {
 
     @ManyToOne
     @JoinColumn(name = "reservation_history_id", nullable = false)
+    //@JsonIgnoreProperties({"historials","totals","room","user"})
     @JsonIgnore
     private Reservation reservation;
 }
